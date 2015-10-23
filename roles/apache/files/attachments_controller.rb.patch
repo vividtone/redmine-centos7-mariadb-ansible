@@ -1,0 +1,12 @@
+--- redmine-3.1.1/app/controllers/attachments_controller.rb	2015-09-20 02:21:21.000000000 -0400
++++ /var/lib/redmine/app/controllers/attachments_controller.rb	2015-10-19 21:08:37.304931387 -0400
+@@ -57,7 +57,8 @@ class AttachmentsController < Applicatio
+       # images are sent inline
+       send_file @attachment.diskfile, :filename => filename_for_content_disposition(@attachment.filename),
+                                       :type => detect_content_type(@attachment),
+-                                      :disposition => (@attachment.image? ? 'inline' : 'attachment')
++                                      :disposition => (@attachment.image? ? 'inline' : 'attachment'),
++                                      :x_sendfile => true
+     end
+   end
+ 

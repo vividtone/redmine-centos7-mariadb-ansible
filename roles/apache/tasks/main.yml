@@ -2,26 +2,22 @@
   sudo: yes
   yum: name='httpd,httpd-devel'
 
-- name: mod_xsendfile.cのダウンロード
-  get_url:
-    url=https://tn123.org/mod_xsendfile/mod_xsendfile.c
-    dest={{ work_dir }}
-
-- name: mod_xsendfile.cのコンパイル
+- name: mod_xsendfileのインストール
   sudo: yes
-  command:
-    /usr/bin/apxs -cia {{ work_dir }}/mod_xsendfile.c
+  yum:
+    name='mod_xsendfile'
+    enablerepo=epel
 
-- name: attachment_controller.rbへの適用
+- name: attachments_controller.rbの修正
   sudo: yes
-  template:
-    src=attachments_controller.rb
+  patch:
+    src=roles/apache/files/attachments_controller.rb.patch
     dest=/var/lib/redmine/app/controllers/attachments_controller.rb
 
-- name: production.rbへの適用
+- name: production.rbの修正
   sudo: yes
-  template:
-    src=production.rb
+  patch:
+    src=roles/apache/files/production.rb.patch
     dest=/var/lib/redmine/config/environments/production.rb
 
 - name: Redmineディレクトリ以下のオーナーを変更
